@@ -40,3 +40,4 @@ endfunction
 command! -bang -nargs=* -complete=file Grep call s:Grep("grep", "<bang>", <f-args>)
 command! -bang -nargs=* -complete=file GrepAdd call s:Grep("grepadd", "<bang>", <f-args>)
 command! -bang -nargs=* -complete=file LGrep call s:Grep("lgrep", "<bang>", <f-args>)
+command! -bang -nargs=* -complete=file LGrepAdd call s:Grep("lgrepadd", "<bang>", <f-args>)
