@@ -10,7 +10,7 @@ else
   finish
 endif
 
-function! s:Grep(bang, ...)
+function! s:Grep(command, bang, ...)
   if a:0 ==? 0
     let l:pattern = expand("<cword>")
   else
@@ -25,11 +25,12 @@ function! s:Grep(bang, ...)
   let l:grepformat = &grepformat
   let &grepprg     = s:grepprg
   let &grepformat  = s:grepformat
-  silent execute "grep" . a:bang . " " . l:pattern . " " . l:files
+  silent execute a:command . a:bang . " " . l:pattern . " " . l:files
   botright copen
   wincmd p
   let &grepprg    = l:grepprg
   let &grepformat = l:grepformat
 endfunction
 
-command! -bang -nargs=* -complete=file Grep call s:Grep("<bang>", <f-args>)
+command! -bang -nargs=* -complete=file Grep call s:Grep("grep", "<bang>", <f-args>)
+command! -bang -nargs=* -complete=file GrepAdd call s:Grep("grepadd", "<bang>", <f-args>)
