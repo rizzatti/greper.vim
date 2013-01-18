@@ -3,14 +3,15 @@ if exists("g:loaded_greper")
 endif
 let g:loaded_greper = 1
 
-function! s:create_command(name, exp)
+function! s:create_command(name, utility, exp)
+  let l:args = "'" . a:utility . "', '" . a:exp . "<bang>', <f-args>"
   execute "command! -bang -nargs=* -complete=file " . a:name
-        \ " call greper#Greper('" . a:exp . "<bang>', <f-args>)"
+        \ " call greper#Greper(" . l:args . ")"
 endfunction
 
 if executable("grep")
-  call s:create_command("Grep", "grep")
-  call s:create_command("GrepAdd", "grepadd")
-  call s:create_command("LGrep", "lgrep")
-  call s:create_command("LGrepAdd", "lgrepadd")
+  call s:create_command("Grep", "grep", "grep")
+  call s:create_command("GrepAdd", "grep", "grepadd")
+  call s:create_command("LGrep", "grep", "lgrep")
+  call s:create_command("LGrepAdd", "grep", "lgrepadd")
 endif
