@@ -15,3 +15,10 @@ if executable("grep")
   call s:create_command("LGrep", "grep", "lgrep")
   call s:create_command("LGrepAdd", "grep", "lgrepadd")
 endif
+
+if executable("ack")
+  call s:create_command("Ack", "ack", "grep")
+  call s:create_command("AckAdd", "ack", "grepadd")
+  call s:create_command("LAck", "ack", "lgrep")
+  call s:create_command("LAckAdd", "ack", "lgrepadd")
+endif
