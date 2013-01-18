@@ -54,7 +54,7 @@ function! s:window_handler_for(prefix)
   return "botright " . a:prefix . "open"
 endfunction
 
-function! greper#Greper(command, ...)
+function! greper#greper(command, ...)
   if exists(":Ag")
     let l:utility = "ag"
   elseif exists(":Ack")
@@ -65,10 +65,10 @@ function! greper#Greper(command, ...)
     return
   endif
 
-  call greper#GreperUtility(l:utility, a:command, a:000)
+  call greper#greper_for(l:utility, a:command, a:000)
 endfunction
 
-function! greper#GreperUtility(utility, command, ...)
+function! greper#greper_for(utility, command, ...)
   redraw
   execute "call greper#" . a:utility . "#save_grep_options()"
   call s:execute(a:command, a:000)

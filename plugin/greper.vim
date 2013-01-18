@@ -7,14 +7,14 @@ function! s:create_command(name, command, ...)
   if a:0 ==? 1
     let l:utility = a:000[0]
     let l:parens = "('" . l:utility . "', '" . a:command . "<bang>', <f-args>)"
-    let l:suffix = "Utility"
+    let l:suffix = "_for"
   else
     let l:parens = "('" . a:command . "<bang>', <f-args>)"
     let l:suffix = ""
   endif
 
   let l:definition = "command! -bang -nargs=* -complete=file " . a:name
-  let l:call = "call greper#Greper" . l:suffix . l:parens
+  let l:call = "call greper#greper" . l:suffix . l:parens
   execute l:definition . " " . l:call
 endfunction
 
