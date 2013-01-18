@@ -10,7 +10,7 @@ function! s:add_mappings(prefix)
   nnoremap <silent> <buffer> v <C-w>p<C-w>v<C-w>b<CR><C-w>=
 endfunction
 
-function! s:command_args_for(args)
+function! s:args_for(args, chars)
   let l:size = len(a:args)
   if l:size ==? 0
     let l:pattern = expand("<cword>")
@@ -22,12 +22,22 @@ function! s:command_args_for(args)
   else
     let l:files = "*"
   endif
+  let l:pattern = s:escape(l:pattern, a:chars)
 
   return l:pattern . " " . l:files
 endfunction
 
-function! s:execute(command, args)
-  silent execute a:command . " " . s:command_args_for(a:args)
+function! s:escape(pattern, chars)
+  return shellescape(escape(a:pattern, a:chars), 1)
+endfunction
+
+function! s:escape_chars_for(utility)
+  return call("greper#" . a:utility . "#escape_chars", [])
+endfunction
+
+function! s:execute(command, args, utility)
+  let l:args = s:args_for(a:args, s:escape_chars_for(a:utility))
+  silent execute a:command . " " . l:args
 endfunction
 
 function! s:prefix_for(command)
@@ -36,6 +46,14 @@ function! s:prefix_for(command)
   else
     return "c"
   endif
+endfunction
+
+function! s:restore_options(utility)
+  call call("greper#" . a:utility . "#restore_grep_options", [])
+endfunction
+
+function! s:save_options(utility)
+  call call("greper#" . a:utility . "#save_grep_options", [])
 endfunction
 
 function! s:setup_window_for(command)
@@ -64,9 +82,9 @@ endfunction
 
 function! greper#greper_for(utility, command, ...)
   redraw
-  call call("greper#" . a:utility . "#save_grep_options", [])
-  call s:execute(a:command, a:000)
+  call s:save_options(a:utility)
+  call s:execute(a:command, a:000, a:utility)
   call s:setup_window_for(a:command)
-  call call("greper#" . a:utility . "#restore_grep_options", [])
+  call s:restore_options(a:utility)
   redraw!
 endfunction

@@ -1,5 +1,10 @@
 let s:agprg = "ag --nocolor --nogroup --column"
 let s:agformat = "%f:%l:%c:%m"
+let s:escape_chars = '*()+|?.^$[]\{}'
+
+function! greper#ag#escape_chars()
+  return s:escape_chars
+endfunction
 
 function! greper#ag#restore_grep_options()
   let &grepprg    = s:oldprg
