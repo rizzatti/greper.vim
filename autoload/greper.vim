@@ -32,12 +32,22 @@ function! s:command_args_for(args)
   return l:pattern . " " . l:files
 endfunction
 
+function! s:execute(command, args)
+  silent execute a:command . " " . s:command_args_for(a:args)
+endfunction
+
 function! s:prefix_for(command)
   if a:command =~? "^l"
     return "l"
   else
     return "c"
   endif
+endfunction
+
+function! s:setup_window_for(command)
+  let l:prefix = s:prefix_for(a:command)
+  silent execute s:window_handler_for(l:prefix)
+  call s:add_mappings(l:prefix)
 endfunction
 
 function! s:window_handler_for(prefix)
@@ -60,11 +70,9 @@ endfunction
 
 function! greper#GreperUtility(utility, command, ...)
   redraw
-  let l:prefix = s:prefix_for(a:command)
   execute "call greper#" . a:utility . "#save_grep_options()"
-  silent execute a:command . " " . s:command_args_for(a:000)
-  silent execute s:window_handler_for(l:prefix)
-  call s:add_mappings(l:prefix)
+  call s:execute(a:command, a:000)
+  call s:setup_window_for(a:command)
   execute "call greper#" . a:utility . "#restore_grep_options()"
   redraw!
 endfunction
