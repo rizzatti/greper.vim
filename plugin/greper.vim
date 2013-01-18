@@ -3,10 +3,19 @@ if exists("g:loaded_greper")
 endif
 let g:loaded_greper = 1
 
-function! s:create_command(name, utility, exp)
-  let l:args = "'" . a:utility . "', '" . a:exp . "<bang>', <f-args>"
-  execute "command! -bang -nargs=* -complete=file " . a:name
-        \ " call greper#GreperUtility(" . l:args . ")"
+function! s:create_command(name, command, ...)
+  if a:0 ==? 1
+    let l:utility = a:000[0]
+    let l:parens = "('" . l:utility . "', '" . a:command . "<bang>', <f-args>)"
+    let l:suffix = "Utility"
+  else
+    let l:parens = "('" . a:command . "<bang>', <f-args>)"
+    let l:suffix = ""
+  endif
+
+  let l:definition = "command! -bang -nargs=* -complete=file " . a:name
+  let l:call = "call greper#Greper" . l:suffix . l:parens
+  execute l:definition . " " . l:call
 endfunction
 
 let s:found = 0
@@ -14,28 +23,30 @@ let s:found = 0
 if executable("grep")
   let s:found = 1
   call s:create_command("Grep", "grep", "grep")
-  call s:create_command("GrepAdd", "grep", "grepadd")
-  call s:create_command("LGrep", "grep", "lgrep")
-  call s:create_command("LGrepAdd", "grep", "lgrepadd")
+  call s:create_command("GrepAdd", "grepadd", "grep")
+  call s:create_command("LGrep", "lgrep", "grep")
+  call s:create_command("LGrepAdd", "lgrepadd", "grep")
 endif
 
 if executable("ag")
   let s:found = 1
-  call s:create_command("Ag", "ag", "grep")
-  call s:create_command("AgAdd", "ag", "grepadd")
-  call s:create_command("LAg", "ag", "lgrep")
-  call s:create_command("LAgAdd", "ag", "lgrepadd")
+  call s:create_command("Ag", "grep", "ag")
+  call s:create_command("AgAdd", "grepadd", "ag")
+  call s:create_command("LAg", "lgrep", "ag")
+  call s:create_command("LAgAdd", "lgrepadd", "ag")
 endif
 
 if executable("ack")
   let s:found = 1
-  call s:create_command("Ack", "ack", "grep")
-  call s:create_command("AckAdd", "ack", "grepadd")
-  call s:create_command("LAck", "ack", "lgrep")
-  call s:create_command("LAckAdd", "ack", "lgrepadd")
+  call s:create_command("Ack", "grep", "ack")
+  call s:create_command("AckAdd", "grepadd", "ack")
+  call s:create_command("LAck", "lgrep", "ack")
+  call s:create_command("LAckAdd", "lgrepadd", "ack")
 endif
 
 if s:found
-  command! -bang -nargs=* -complete=file G
-        \ call greper#Greper("<bang>", <f-args>)
+  call s:create_command("G", "grep")
+  call s:create_command("GAdd", "grepadd")
+  call s:create_command("LG", "lgrep")
+  call s:create_command("LGAdd", "lgrepadd")
 endif
