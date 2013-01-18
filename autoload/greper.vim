@@ -1,3 +1,15 @@
+function! s:add_mappings(prefix)
+  nnoremap <silent> <buffer> go <CR><C-w>p<C-w>=
+  nnoremap <silent> <buffer> gs <C-w>p<C-w>s<C-w>b<CR><C-w>p<C-w>=
+  nnoremap <silent> <buffer> gt <C-w><CR><C-w>TgT<C-w>p
+  nnoremap <silent> <buffer> gv <C-w>p<C-w>v<C-w>b<CR><C-w>p<C-w>=
+  nnoremap <silent> <buffer> o <CR>
+  execute "nnoremap <silent> <buffer> q :" . a:prefix . "close<CR>"
+  nnoremap <silent> <buffer> s <C-w>p<C-w>s<C-w>b<CR><C-w>=
+  nnoremap <silent> <buffer> t <C-w><CR><C-w>T
+  nnoremap <silent> <buffer> v <C-w>p<C-w>v<C-w>b<CR><C-w>=
+endfunction
+
 function! s:command_args_for(args)
   if len(a:args) ==? 1 && type(a:args[0]) ==? type([])
     let l:args = a:args[0]
@@ -20,14 +32,16 @@ function! s:command_args_for(args)
   return l:pattern . " " . l:files
 endfunction
 
-function! s:window_command_for(command)
+function! s:prefix_for(command)
   if a:command =~? "^l"
-    let l:prefix = "l"
+    return "l"
   else
-    let l:prefix = "c"
+    return "c"
   endif
+endfunction
 
-  return "botright " . l:prefix . "open"
+function! s:window_handler_for(prefix)
+  return "botright " . a:prefix . "open"
 endfunction
 
 function! greper#Greper(command, ...)
@@ -46,11 +60,11 @@ endfunction
 
 function! greper#GreperUtility(utility, command, ...)
   redraw
+  let l:prefix = s:prefix_for(a:command)
   execute "call greper#" . a:utility . "#save_grep_options()"
-  let l:args = s:command_args_for(a:000)
-  let l:window_command = s:window_command_for(a:command)
-  silent execute a:command . " " . l:args
-  silent execute l:window_command
+  silent execute a:command . " " . s:command_args_for(a:000)
+  silent execute s:window_handler_for(l:prefix)
+  call s:add_mappings(l:prefix)
   execute "call greper#" . a:utility . "#restore_grep_options()"
   redraw!
 endfunction
