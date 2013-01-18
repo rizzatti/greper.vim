@@ -1,7 +1,7 @@
 let s:greper_grepprg = "grep -nHR"
 let s:greper_grepformat = "%f:%l:%m"
 
-function! s:ArgsFor(args)
+function! s:command_args_for(args)
   let l:size = len(a:args)
   if l:size ==? 0
     let l:pattern = expand("<cword>")
@@ -16,19 +16,19 @@ function! s:ArgsFor(args)
   return l:pattern . " " . l:files
 endfunction
 
-function! s:RestoreGrepOptions()
+function! s:restore_grep_options()
   let &grepprg    = s:grepprg
   let &grepformat = s:grepformat
 endfunction
 
-function! s:SaveGrepOptions()
+function! s:save_grep_options()
   let s:grepprg    = &grepprg
   let s:grepformat = &grepformat
   let &grepprg     = s:greper_grepprg
   let &grepformat  = s:greper_grepformat
 endfunction
 
-function! s:WindowCommandFor(command)
+function! s:window_command_for(command)
   if a:command =~? "^l"
     let l:prefix = "l"
   else
@@ -38,10 +38,10 @@ function! s:WindowCommandFor(command)
 endfunction
 
 function! greper#Greper(command, ...)
-  call s:SaveGrepOptions()
-  let l:args = s:ArgsFor(a:000)
-  let l:window_command = s:WindowCommandFor(a:command)
+  call s:save_grep_options()
+  let l:args = s:command_args_for(a:000)
+  let l:window_command = s:window_command_for(a:command)
   silent execute a:command . " " . l:args
   silent execute l:window_command
-  call s:RestoreGrepOptions()
+  call s:restore_grep_options()
 endfunction
