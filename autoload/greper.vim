@@ -1,3 +1,6 @@
+let s:greper_grepprg = "grep -nHR"
+let s:greper_grepformat = "%f:%l:%m"
+
 function! s:ArgsFor(args)
   let l:size = len(a:args)
   if l:size ==? 0
@@ -21,8 +24,8 @@ endfunction
 function! s:SaveGrepOptions()
   let s:grepprg    = &grepprg
   let s:grepformat = &grepformat
-  let &grepprg     = g:grepprg
-  let &grepformat  = g:grepformat
+  let &grepprg     = s:greper_grepprg
+  let &grepformat  = s:greper_grepformat
 endfunction
 
 function! s:WindowCommandFor(command)

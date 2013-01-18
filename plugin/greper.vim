@@ -3,14 +3,14 @@ if exists("g:loaded_greper")
 endif
 let g:loaded_greper = 1
 
-if executable("grep")
-  let g:grepprg = "grep -nHR"
-  let g:grepformat = "%f:%l:%m"
-else
-  finish
-endif
+function! s:CreateCommand(name, exp)
+  execute "command! -bang -nargs=* -complete=file " . a:name
+        \ " call greper#Greper('" . a:exp . "<bang>', <f-args>)"
+endfunction
 
-command! -bang -nargs=* -complete=file Grep call greper#Greper("grep<bang>", <f-args>)
-command! -bang -nargs=* -complete=file GrepAdd call greper#Greper("grepadd<bang>", <f-args>)
-command! -bang -nargs=* -complete=file LGrep call greper#Greper("lgrep<bang>", <f-args>)
-command! -bang -nargs=* -complete=file LGrepAdd call greper#Greper("lgrepadd<bang>", <f-args>)
+if executable("grep")
+  call s:CreateCommand("Grep", "grep")
+  call s:CreateCommand("GrepAdd", "grepadd")
+  call s:CreateCommand("LGrep", "lgrep")
+  call s:CreateCommand("LGrepAdd", "lgrepadd")
+endif
