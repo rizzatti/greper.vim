@@ -45,10 +45,12 @@ function! greper#Greper(command, ...)
 endfunction
 
 function! greper#GreperUtility(utility, command, ...)
+  redraw
   execute "call greper#" . a:utility . "#save_grep_options()"
   let l:args = s:command_args_for(a:000)
   let l:window_command = s:window_command_for(a:command)
   silent execute a:command . " " . l:args
   silent execute l:window_command
   execute "call greper#" . a:utility . "#restore_grep_options()"
+  redraw!
 endfunction
