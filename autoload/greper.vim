@@ -1,5 +1,11 @@
 function! s:command_args_for(args)
-  let l:size = len(a:args)
+  if len(a:args) ==? 1 && type(a:args[0]) ==? type([])
+    let l:args = a:args[0]
+  else
+    let l:args = a:args
+  endif
+
+  let l:size = len(l:args)
   if l:size ==? 0
     let l:pattern = expand("<cword>")
   else
@@ -10,6 +16,7 @@ function! s:command_args_for(args)
   else
     let l:files = "*"
   endif
+
   return l:pattern . " " . l:files
 endfunction
 
@@ -19,10 +26,25 @@ function! s:window_command_for(command)
   else
     let l:prefix = "c"
   endif
+
   return "botright " . l:prefix . "open"
 endfunction
 
-function! greper#Greper(utility, command, ...)
+function! greper#Greper(bang, ...)
+  if exists(":Ag")
+    let l:utility = "ag"
+  elseif exists(":Ack")
+    let l:utility = "ack"
+  elseif exists(":Grep")
+    let l:utility = "grep"
+  else
+    return
+  endif
+
+  call greper#GreperUtility(l:utility, "grep" . bang, a:000)
+endfunction
+
+function! greper#GreperUtility(utility, command, ...)
   execute "call greper#" . a:utility . "#save_grep_options()"
   let l:args = s:command_args_for(a:000)
   let l:window_command = s:window_command_for(a:command)
