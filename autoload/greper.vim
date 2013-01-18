@@ -11,20 +11,14 @@ function! s:add_mappings(prefix)
 endfunction
 
 function! s:command_args_for(args)
-  if len(a:args) ==? 1 && type(a:args[0]) ==? type([])
-    let l:args = a:args[0]
-  else
-    let l:args = a:args
-  endif
-
-  let l:size = len(l:args)
+  let l:size = len(a:args)
   if l:size ==? 0
     let l:pattern = expand("<cword>")
   else
-    let l:pattern = l:args[0]
+    let l:pattern = a:args[0]
   endif
   if l:size >=? 2
-    let l:files = join(l:args[1:], " ")
+    let l:files = join(a:args[1:], " ")
   else
     let l:files = "*"
   endif
@@ -65,14 +59,14 @@ function! greper#greper(command, ...)
     return
   endif
 
-  call greper#greper_for(l:utility, a:command, a:000)
+  call call("greper#greper_for", [l:utility, a:command] + a:000)
 endfunction
 
 function! greper#greper_for(utility, command, ...)
   redraw
-  execute "call greper#" . a:utility . "#save_grep_options()"
+  call call("greper#" . a:utility . "#save_grep_options", [])
   call s:execute(a:command, a:000)
   call s:setup_window_for(a:command)
-  execute "call greper#" . a:utility . "#restore_grep_options()"
+  call call("greper#" . a:utility . "#restore_grep_options", [])
   redraw!
 endfunction
