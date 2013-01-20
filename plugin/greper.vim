@@ -3,50 +3,56 @@ if exists("g:loaded_greper")
 endif
 let g:loaded_greper = 1
 
-function! s:create_command(name, command, ...)
-  if a:0 ==? 1
-    let l:utility = a:000[0]
-    let l:parens = "('" . l:utility . "', '" . a:command . "<bang>', <f-args>)"
-    let l:suffix = "_for"
-  else
-    let l:parens = "('" . a:command . "<bang>', <f-args>)"
-    let l:suffix = ""
-  endif
+let s:save_cpoptions = &cpoptions
+set cpoptions&vim
 
-  let l:definition = "command! -bang -nargs=* -complete=file " . a:name
-  let l:call = "call greper#greper" . l:suffix . l:parens
-  execute l:definition . " " . l:call
+function! s:CreateCommand(command, ex, utility) abort
+  if exists(':' . a:command) == 2
+    echom 'greper.vim could not create :' . a:command
+    return
+  end
+  let definition = 'command -bang -nargs=* -complete=file ' . a:command
+  let parens = '("' . a:ex . '<bang>", "' . a:utility . '", <f-args>)'
+  let callee = ' call greper#Run' . parens
+  execute definition . callee
 endfunction
 
-let s:found = 0
-
-if executable("grep")
-  let s:found = 1
-  call s:create_command("Grep", "grep", "grep")
-  call s:create_command("GrepAdd", "grepadd", "grep")
-  call s:create_command("LGrep", "lgrep", "grep")
-  call s:create_command("LGrepAdd", "lgrepadd", "grep")
+if executable('ag')
+  if !exists('g:greper_utility')
+    let g:greper_utility = 'ag'
+  endif
+  call s:CreateCommand('Ag', 'grep', 'ag')
+  call s:CreateCommand('AgAdd', 'grepadd', 'ag')
+  call s:CreateCommand('LAg', 'lgrep', 'ag')
+  call s:CreateCommand('LAgAdd', 'lgrepadd', 'ag')
 endif
 
-if executable("ag")
-  let s:found = 1
-  call s:create_command("Ag", "grep", "ag")
-  call s:create_command("AgAdd", "grepadd", "ag")
-  call s:create_command("LAg", "lgrep", "ag")
-  call s:create_command("LAgAdd", "lgrepadd", "ag")
+if executable('ack')
+  if !exists('g:greper_utility')
+    let g:greper_utility = 'ack'
+  endif
+  call s:CreateCommand('Ack', 'grep', 'ack')
+  call s:CreateCommand('AckAdd', 'grepadd', 'ack')
+  call s:CreateCommand('LAck', 'lgrep', 'ack')
+  call s:CreateCommand('LAckAdd', 'lgrepadd', 'ack')
 endif
 
-if executable("ack")
-  let s:found = 1
-  call s:create_command("Ack", "grep", "ack")
-  call s:create_command("AckAdd", "grepadd", "ack")
-  call s:create_command("LAck", "lgrep", "ack")
-  call s:create_command("LAckAdd", "lgrepadd", "ack")
+if executable('grep')
+  if !exists('g:greper_utility')
+    let g:greper_utility = 'grep'
+  endif
+  call s:CreateCommand('Grep', 'grep', 'grep')
+  call s:CreateCommand('GrepAdd', 'grepadd', 'grep')
+  call s:CreateCommand('LGrep', 'lgrep', 'grep')
+  call s:CreateCommand('LGrepAdd', 'lgrepadd', 'grep')
 endif
 
-if s:found
-  call s:create_command("G", "grep")
-  call s:create_command("GAdd", "grepadd")
-  call s:create_command("LG", "lgrep")
-  call s:create_command("LGAdd", "lgrepadd")
+if exists('g:greper_utility')
+  call s:CreateCommand('G', 'grep', g:greper_utility)
+  call s:CreateCommand('GAdd', 'grepadd', g:greper_utility)
+  call s:CreateCommand('LG', 'lgrep', g:greper_utility)
+  call s:CreateCommand('LGAdd', 'lgrepadd', g:greper_utility)
 endif
+
+let &cpoptions = s:save_cpoptions
+unlet s:save_cpoptions
