@@ -52,7 +52,15 @@ if exists('g:greper_utility')
   call s:CreateCommand('GAdd', 'grepadd', g:greper_utility)
   call s:CreateCommand('LG', 'lgrep', g:greper_utility)
   call s:CreateCommand('LGAdd', 'lgrepadd', g:greper_utility)
+  noremap <script> <unique> <Plug>Greper <SID>Greper
+  noremap <SID>Greper :call <SID>Greper('')<CR>
+  noremap <script> <unique> <Plug>Greper! <SID>Greper!
+  noremap <SID>Greper! :call <SID>Greper('!')<CR>
 endif
+
+function! s:Greper(bang)
+  call greper#Run('grep' . a:bang, g:greper_utility, expand('<cword>'))
+endfunction
 
 let &cpoptions = s:save_cpoptions
 unlet s:save_cpoptions
