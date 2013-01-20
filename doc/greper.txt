@@ -17,24 +17,98 @@
 ==============================================================================
 CONTENTS                                                      *GreperContents*
 
-    1. Intro .............. |GreperIntro|
-    2. Usage .............. |GreperUsage|
-    3. Mappings ........... |GreperMappings|
-    4. License ............ |GreperLicense|
-    5. Bugs ............... |GreperBugs|
-    6. Contributing ....... |GreperContributing|
-    7. Changelog .......... |GreperChangelog|
-    8. Credits ............ |GreperCredits|
+    1. Intro ...................... |GreperIntro|
+    2. Usage ...................... |GreperUsage|
+        2.1 Main Command .......... |GreperMainCommand|
+            2.1.1 :G[!] ........... |:G|
+            2.1.2 :GAdd[!] ........ |:GAdd|
+            2.1.3 :LG[!] .......... |:LG|
+            2.1.4 :LGAdd[!] ....... |:LGAdd|
+        2.2 Utility Commands ...... |GreperUtilityCommands|
+            2.2.1 :Ag family ...... |GreperAg|
+            2.2.2 :Ack family ..... |GreperAck|
+            2.2.3 :Grep family .... |GreperGrep|
+    3. Mappings ................... |GreperMappings|
+    4. License .................... |GreperLicense|
+    5. Bugs ....................... |GreperBugs|
+    6. Contributing ............... |GreperContributing|
+    7. Changelog .................. |GreperChangelog|
+    8. Credits .................... |GreperCredits|
 
 ==============================================================================
 1. Intro                                                         *GreperIntro*
 
-TODO
+Vim has great support for searching for text inside of files with the |:grep|
+and |:vimgrep| family of commands, but using them effectively is not always
+easy. Quoting strings, escaping chars, recursing or not, and using the
+|quickfix-window| and |location-list-window|.
+
+Greper tries to make searching simpler and familiar.
 
 ==============================================================================
 2. Usage                                                         *GreperUsage*
 
-TODO
+------------------------------------------------------------------------------
+2.1. Main Command                                          *GreperMainCommand*
+
+Greper will try to find known utilities in the system, and create the |:G|
+family of commands, for the first utility it finds, in the following order:
+
+    - |:Ag|
+    - |:Ack|
+    - |:Grep|
+
+------------------------------------------------------------------------------
+2.1.1 :G[!]                                                               *:G*
+
+Usage: >
+
+    :G my_variable
+<
+Will search for the word 'my_variable' recursively in all files inside the
+current directory. The quickfix window will be opened showing the results, and
+the cursor will jump to the first match found.
+    >
+    :G! self.run( lib/*.rb
+<
+Will search for 'self.run(' (with the dot and parentheses) in all ruby files
+inside lib. The quickfix will be opened showing the results, but the cursor
+will stay on the current position (|:command-bang|), inside the current buffer.
+    >
+    :G! /function \w+\(.*\)/
+
+Will search for function definitions using regular expressions.
+
+Behaves similarly to |:grep|.
+
+------------------------------------------------------------------------------
+2.1.2 :GAdd[!]                                                         *:GAdd*
+
+This command will add search results to the quickfix window from a previous
+search, instead clearing the results.
+    >
+    :G some_var
+    " Searches for some_var and shows the results
+    :GAdd other_var
+    " Adds other_var results to the bottom of the list
+<
+Behaves similarly to |:grepadd|.
+
+------------------------------------------------------------------------------
+2.1.3 :LG[!]                                                             *:LG*
+
+Similar to |:G|, but uses the |location-list-window| instead of the
+|quickfix-window| to show the results.
+
+Behaves similary to |:lgrep|.
+
+------------------------------------------------------------------------------
+2.1.4 :LGAdd[!]                                                       *:LGAdd*
+
+Similar to |:LG|, but uses the |location-list-window| instead of the
+|quickfix-window| to show the results.
+
+Behaves similary to |:lgrepadd|.
 
 ==============================================================================
 3. Mappings                                                   *GreperMappings*
