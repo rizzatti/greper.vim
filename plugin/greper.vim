@@ -8,9 +8,9 @@ set cpoptions&vim
 
 function! s:CreateCommand(command, ex, utility) abort
   if exists(':' . a:command) == 2
-    echom 'greper.vim could not create :' . a:command
+    echom 'greper.vim: could not create :' . a:command
     return
-  end
+  endif
   let definition = 'command -bang -nargs=* -complete=file ' . a:command
   let parens = '("' . a:ex . '<bang>", "' . a:utility . '", <f-args>)'
   let callee = ' call greper#Run' . parens
@@ -56,6 +56,8 @@ if exists('g:greper_utility')
   noremap <SID>Greper :call <SID>Greper('')<CR>
   noremap <script> <unique> <Plug>Greper! <SID>Greper!
   noremap <SID>Greper! :call <SID>Greper('!')<CR>
+else
+  echom 'greper.vim: could not find any suitable greper utility'
 endif
 
 function! s:Greper(bang)
