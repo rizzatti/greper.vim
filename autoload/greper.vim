@@ -18,7 +18,13 @@ function! s:greper.execute() dict abort
 endfunction
 
 function! s:greper._escape(pattern) dict abort
-  return shellescape(escape(a:pattern, self._get('chars')), 1)
+  let matches = matchlist(a:pattern, '^\/\(.*\)\/$')
+  if len(matches) == 0
+    let pattern = escape(a:pattern, self._get('chars'))
+  else
+    let pattern = matches[1]
+  endif
+  return shellescape(pattern, 1)
 endfunction
 
 function! s:greper._get(variable) dict abort
