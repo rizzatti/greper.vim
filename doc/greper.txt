@@ -1,0 +1,84 @@
+*greper.txt*         Trying to make grep commands more useful
+
+           /$$$$$$                                                   ~
+          /$$__  $$                                                  ~
+         | $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ ~
+         | $$ /$$$$ /$$__  $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$__  $$~
+         | $$|_  $$| $$  \__/| $$$$$$$$| $$  \ $$| $$$$$$$$| $$  \__/~
+         | $$  \ $$| $$      | $$_____/| $$  | $$| $$_____/| $$      ~
+         |  $$$$$$/| $$      |  $$$$$$$| $$$$$$$/|  $$$$$$$| $$      ~
+          \______/ |__/       \_______/| $$____/  \_______/|__/      ~
+                                       | $$                          ~
+                                       | $$                          ~
+                                       |__/                          ~
+
+                        Search, the way it should be.
+
+==============================================================================
+CONTENTS                                                      *GreperContents*
+
+    1. Intro .............. |GreperIntro|
+    2. Usage .............. |GreperUsage|
+    3. Mappings ........... |GreperMappings|
+    4. License ............ |GreperLicense|
+    5. Bugs ............... |GreperBugs|
+    6. Contributing ....... |GreperContributing|
+    7. Changelog .......... |GreperChangelog|
+    8. Credits ............ |GreperCredits|
+
+==============================================================================
+1. Intro                                                         *GreperIntro*
+
+TODO
+
+==============================================================================
+2. Usage                                                         *GreperUsage*
+
+TODO
+
+==============================================================================
+3. Mappings                                                   *GreperMappings*
+
+TODO
+
+==============================================================================
+4. License                                                     *GreperLicense*
+
+Released under the MIT License.
+
+==============================================================================
+5. Bugs                                                           *GreperBugs*
+
+Before submitting a bug report, try upgrading to the latest version of the
+plugin. The bug could have been fixed already.
+
+If the problem persists, go to:
+
+    https://github.com/zehrizzatti/greper.vim/issues
+
+Check the list of open issues and see if the problem you are facing has not
+been reported already. You can add more information to the issue in case it
+has. Otherwise, submit a new issue.
+
+==============================================================================
+6. Contributing                                           *GreperContributing*
+
+Contributions are welcomed and appreciated. Just follow the normal Github
+procedure. Go to:
+
+    https://github.com/zehrizzatti/greper.vim
+
+Fork the project. Work on what you think would make it better. Send a pull
+request.
+
+==============================================================================
+7. Changelog                                                 *GreperChangelog*
+
+Refer to CHANGELOG.txt
+
+==============================================================================
+8. Credits                                                    *GreperCredits*
+
+TODO
+
+" vim: ft=help
