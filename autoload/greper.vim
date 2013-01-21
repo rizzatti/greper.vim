@@ -81,7 +81,7 @@ endfunction
 function! greper#Run(ex, utility, ...) abort
   redraw
   let greper = s:New(s:Greper, a:ex, a:utility, a:000)
-  let window = s:New(s:Window, a:utility)
+  let window = s:New(s:Window, a:ex)
   call greper.Execute()
   call window.Setup()
   redraw!
