@@ -195,10 +195,10 @@ q       Closes the quickfix (or location list) window.
 
 This plugin provides helpful mappings for common use cases.
 
-<Plug>Greper            Searches for the |word| under the cursor, shows the
+<Plug>GreperWord        Searches for the |word| under the cursor, shows the
                         results and jumps to the first match.
 
-<Plug>Greper!           Searches for the |word| under the cursor and shows the
+<Plug>Greper!Word       Searches for the |word| under the cursor and shows the
                         results.
 
 <Plug>GreperWORD        Searches for the |WORD| under the cursor, shows the
@@ -209,7 +209,7 @@ This plugin provides helpful mappings for common use cases.
 
 For example, add this to your |.vimrc|:
     >
-    :nmap <silent> <leader>a <Plug>Greper!
+    :nmap <silent> <leader>a <Plug>Greper!Word
 <
     Note: Using |:noremap| will not work with <Plug> mappings.
 

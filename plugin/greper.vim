@@ -52,10 +52,10 @@ if exists('g:greper_utility')
   call s:CreateCommand('GAdd', 'grepadd', g:greper_utility)
   call s:CreateCommand('LG', 'lgrep', g:greper_utility)
   call s:CreateCommand('LGAdd', 'lgrepadd', g:greper_utility)
-  noremap <script> <unique> <Plug>Greper <SID>Greper
-  noremap <SID>Greper :call <SID>Greper('', '<cword>')<CR>
-  noremap <script> <unique> <Plug>Greper! <SID>Greper!
-  noremap <SID>Greper! :call <SID>Greper('!', '<cword>')<CR>
+  noremap <script> <unique> <Plug>GreperWord <SID>GreperWord
+  noremap <SID>GreperWord :call <SID>Greper('', '<cword>')<CR>
+  noremap <script> <unique> <Plug>Greper!Word <SID>Greper!Word
+  noremap <SID>Greper!Word :call <SID>Greper('!', '<cword>')<CR>
   noremap <script> <unique> <Plug>GreperWORD <SID>GreperWORD
   noremap <SID>GreperWORD :call <SID>Greper('', '<cWORD>')<CR>
   noremap <script> <unique> <Plug>Greper!WORD <SID>Greper!WORD
