@@ -19,12 +19,12 @@ CONTENTS                                                      *GreperContents*
 
     1. Intro ...................... |GreperIntro|
     2. Usage ...................... |GreperUsage|
-        2.1 Main Command .......... |GreperMainCommand|
+        2.1 Main Command .......... |GreperCommand|
             2.1.1 :G[!] ........... |:G|
             2.1.2 :GAdd[!] ........ |:GAdd|
             2.1.3 :LG[!] .......... |:LG|
             2.1.4 :LGAdd[!] ....... |:LGAdd|
-        2.2 Utility Commands ...... |GreperUtilityCommands|
+        2.2 Utility Commands ...... |GreperUtility|
             2.2.1 :Ag family ...... |:Ag|
             2.2.2 :Ack family ..... |:Ack|
             2.2.3 :Grep family .... |:Grep|
@@ -55,7 +55,7 @@ commands in case they already exist. A message will be displayed if it is
 unable to do so. Check |:messages|.
 
 ------------------------------------------------------------------------------
-2.1. Main Command                                          *GreperMainCommand*
+2.1. Main Command                                              *GreperCommand*
 
 Greper will create the |:G| family of commands, using the first utility it
 finds, in the following order:
@@ -103,10 +103,8 @@ Behaves similarly to |:grep|.
 ------------------------------------------------------------------------------
 2.1.2 :GAdd[!]                                                         *:GAdd*
 
-The usage is the same as in |:G|.
-
-This command will add search results to the quickfix window from a previous
-search, instead clearing the results.
+Similar to |:G|. This command will add search results to the quickfix window
+from a previous search, instead clearing the results.
     >
     :G some_var
     :GAdd other_var
@@ -135,7 +133,7 @@ Similar to |:LG|, but uses the |location-list-window| instead of the
 Behaves similary to |:lgrepadd|.
 
 ------------------------------------------------------------------------------
-2.2 Utility Commands                                   *GreperUtilityCommands*
+2.2 Utility Commands                                           *GreperUtility*
 
 Greper will try to find known utilities in the system, and create the
 following commands for each one it recognizes.
@@ -181,16 +179,16 @@ The search results will be shown inside the |quickfix| (or the
 |location-list|).  This plugin will create the following mappings inside that
 window, to easily navigate and preview the results:
 
-o               Open the file under the cursor inside the current window.
-go              Preview the file under the cursor in the current window (but
-                keep focus inside the quickfix window).
-s               Open the file in a horizontal split.
-gs              Preview the file in a horizontal split.
-v               Open the file in a vertical split.
-gv              Preview the file in a vertical split.
-t               Open the file in a new tab page.
-gt              Silently open the file in a new tab page.
-q               Closes the quickfix (or location list) window.
+o       Open the file under the cursor inside the current window.
+go      Preview the file under the cursor in the current window (but keep
+        focus inside the quickfix window).
+s       Open the file in a horizontal split.
+gs      Preview the file in a horizontal split.
+v       Open the file in a vertical split.
+gv      Preview the file in a vertical split.
+t       Open the file in a new tab page.
+gt      Silently open the file in a new tab page.
+q       Closes the quickfix (or location list) window.
 
 ------------------------------------------------------------------------------
 3.2 Key bindings                                           *GreperKeyBindings*
