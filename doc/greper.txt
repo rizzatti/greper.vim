@@ -72,27 +72,38 @@ completely.
 
 Usage:
     >
+    :G[!] [LITERAL | /PATTERN/] [FILE ...]
+<
+Examples:
+    >
+    :G
+<
+    Will search for the word under the cursor recursively in all files inside
+    the current directory. The quickfix window will be opened showing the
+    results, and the cursor will jump to the first match found.
+    >
     :G my_variable
 <
     Will search for the word 'my_variable' recursively in all files inside the
-    current directory. The quickfix window will be opened showing the results,
-    and the cursor will jump to the first match found.
+    current directory, show the results and jump to the first match.
     >
-    :G! self.run( lib/*.rb
+    :G! .run() lib/*.py test/*.py
 <
-    Will search for 'self.run(' (with the dot and parentheses) in all ruby
-    files inside lib. The quickfix will be opened showing the results, but the
-    cursor will stay on the current position (|:command-bang|), inside the
-    current buffer.
+    Will search for '.run()' (literally) in all python files inside lib/ and
+    test/ and show the results. Due to using the `!` the cursor will stay at
+    the current position (|:command-bang|), inside the current buffer.
     >
-    :G! /function \w+\(.*\)/
+    :G! /function \w+\(.*\)/ *.js
 <
-    Will search for function definitions using regular expressions.
+    Will search for function definitions using regular expressions in
+    javascript files.
 
 Behaves similarly to |:grep|.
 
 ------------------------------------------------------------------------------
 2.1.2 :GAdd[!]                                                         *:GAdd*
+
+The usage is the same as in |:G|.
 
 This command will add search results to the quickfix window from a previous
 search, instead clearing the results.
