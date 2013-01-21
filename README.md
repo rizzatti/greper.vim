@@ -1,13 +1,13 @@
 # greper.vim
 
-This vim plugin improves searching for literals and with regular
+This vim plugin improves *searching*, for words and with regular
 expressions, using a simple syntax.
 
-It unifies under a single name, different tools like [ag][ag],
-[ack][ack] and [grep][grep].
+It allows using any of these tools: [ag][ag], [ack][ack] and
+[grep][grep]. Whichever is avaiable, greper.vim will pick the fastest.
 
-It provides a new set of commands, (recommended) mappings and easy
-navigation of the search results window.
+It provides a new set of commands, easy navigation of the search results
+window and (recommended) mappings.
 
 Read the [help][vim-doc] to know more.
 

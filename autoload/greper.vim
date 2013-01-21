@@ -50,7 +50,6 @@ endfunction
 function! s:greper._restore_options() dict abort
   let &grepprg    = self._save.grepprg
   let &grepformat = self._save.grepformat
-  unlet self._save
 endfunction
 
 function! s:greper._save_options() dict abort
