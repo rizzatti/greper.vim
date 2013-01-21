@@ -29,6 +29,8 @@ CONTENTS                                                      *GreperContents*
             2.2.2 :Ack family ..... |GreperAck|
             2.2.3 :Grep family .... |GreperGrep|
     3. Mappings ................... |GreperMappings|
+        3.1 The Quickfix Window ... |GreperQuickfixMappings|
+        3.2 Key bindings .......... |GreperKeyBindings|
     4. License .................... |GreperLicense|
     5. Bugs ....................... |GreperBugs|
     6. Contributing ............... |GreperContributing|
@@ -48,15 +50,22 @@ Greper tries to make searching simpler and familiar.
 ==============================================================================
 2. Usage                                                         *GreperUsage*
 
+This plugin respects user's settings and will not create any of the described
+commands in case they already exist. A message will be displayed if it is
+unable to do so. Check |:messages|.
+
 ------------------------------------------------------------------------------
 2.1. Main Command                                          *GreperMainCommand*
 
-Greper will try to find known utilities in the system, and create the |:G|
-family of commands, for the first utility it finds, in the following order:
+Greper will create the |:G| family of commands, using the first utility it
+finds, in the following order:
 
     - |:Ag|
     - |:Ack|
     - |:Grep|
+
+If none of them are present in the system, the plugin will be disabled
+completely.
 
 ------------------------------------------------------------------------------
 2.1.1 :G[!]                                                               *:G*
@@ -110,11 +119,76 @@ Similar to |:LG|, but uses the |location-list-window| instead of the
 
 Behaves similary to |:lgrepadd|.
 
+------------------------------------------------------------------------------
+2.2 Utility Commands                                   *GreperUtilityCommands*
+
+Greper will try to find known utilities in the system, and create the
+following commands for each one it recognizes.
+
+------------------------------------------------------------------------------
+2.2.1 :Ag family                    *:Ag* *:AgAdd* *:LAg* *:LAgAdd* *GreperAg*
+
+The :Ag family of commands is created if "ag" is found on the system.
+
+For more information on "ag" a.k.a the silver surfer, go to:
+
+    http://geoff.greer.fm/2011/12/27/the-silver-searcher-better-than-ack/
+    https://github.com/ggreer/the_silver_searcher
+
+------------------------------------------------------------------------------
+2.2.2 :Ack family              *:Ack* *:AckAdd* *:LAck* *:LAckAdd* *GreperAck*
+
+The :Ack family of commands is created if "ack" is found on the system.
+
+For more information on "ack", go to:
+
+    http://betterthangrep.com/
+    https://github.com/petdance/ack
+
+------------------------------------------------------------------------------
+2.2.3 :Grep family        *:Grep* *:GrepAdd* *:LGrep* *:LGrepAdd* *GreperGrep*
+
+The :Grep family of commands is created if "grep" if found on the system.
+
+If you do not have grep on your system...
+
 ==============================================================================
 3. Mappings                                                   *GreperMappings*
 
-TODO
+------------------------------------------------------------------------------
+3.1 The Quickfix Window                               *GreperQuickfixMappings*
 
+The search results will be shown inside the |quickfix| (or the
+|location-list|).  This plugin will create the following mappings inside that
+window, to easily navigate and preview the results:
+
+o               Open the file under the cursor inside the current window.
+go              Preview the file under the cursor in the current window (but
+                keep focus inside the quickfix window).
+s               Open the file in a horizontal split.
+gs              Preview the file in a horizontal split.
+v               Open the file in a vertical split.
+gv              Preview the file in a vertical split.
+t               Open the file in a new tab page.
+gt              Silently open the file in a new tab page.
+q               Closes the quickfix (or location list) window.
+
+------------------------------------------------------------------------------
+3.2 Key bindings                                           *GreperKeyBindings*
+
+This plugin provides helpful mappings for common use cases.
+
+<Plug>Greper    Searches for the word under the cursor, show the results and
+                jumps to it.
+
+<Plug>Greper!   Searches for the word under the cursor, show the results and
+                stays put.
+
+For example, add this to your $VIMRC:
+    >
+    :nmap <silent> <leader>a <Plug>Greper!
+    " Notice that using noremap will not work with <Plug> mappings.
+<
 ==============================================================================
 4. License                                                     *GreperLicense*
 
