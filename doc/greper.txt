@@ -25,9 +25,9 @@ CONTENTS                                                      *GreperContents*
             2.1.3 :LG[!] .......... |:LG|
             2.1.4 :LGAdd[!] ....... |:LGAdd|
         2.2 Utility Commands ...... |GreperUtilityCommands|
-            2.2.1 :Ag family ...... |GreperAg|
-            2.2.2 :Ack family ..... |GreperAck|
-            2.2.3 :Grep family .... |GreperGrep|
+            2.2.1 :Ag family ...... |:Ag|
+            2.2.2 :Ack family ..... |:Ack|
+            2.2.3 :Grep family .... |:Grep|
     3. Mappings ................... |GreperMappings|
         3.1 The Quickfix Window ... |GreperQuickfixMappings|
         3.2 Key bindings .......... |GreperKeyBindings|
@@ -60,9 +60,9 @@ unable to do so. Check |:messages|.
 Greper will create the |:G| family of commands, using the first utility it
 finds, in the following order:
 
-    - |:Ag|
-    - |:Ack|
-    - |:Grep|
+    1) `ag`
+    2) `ack`
+    3) `grep`
 
 If none of them are present in the system, the plugin will be disabled
 completely.
@@ -70,23 +70,24 @@ completely.
 ------------------------------------------------------------------------------
 2.1.1 :G[!]                                                               *:G*
 
-Usage: >
-
+Usage:
+    >
     :G my_variable
 <
-Will search for the word 'my_variable' recursively in all files inside the
-current directory. The quickfix window will be opened showing the results, and
-the cursor will jump to the first match found.
+    Will search for the word 'my_variable' recursively in all files inside the
+    current directory. The quickfix window will be opened showing the results,
+    and the cursor will jump to the first match found.
     >
     :G! self.run( lib/*.rb
 <
-Will search for 'self.run(' (with the dot and parentheses) in all ruby files
-inside lib. The quickfix will be opened showing the results, but the cursor
-will stay on the current position (|:command-bang|), inside the current buffer.
+    Will search for 'self.run(' (with the dot and parentheses) in all ruby
+    files inside lib. The quickfix will be opened showing the results, but the
+    cursor will stay on the current position (|:command-bang|), inside the
+    current buffer.
     >
     :G! /function \w+\(.*\)/
-
-Will search for function definitions using regular expressions.
+<
+    Will search for function definitions using regular expressions.
 
 Behaves similarly to |:grep|.
 
@@ -97,10 +98,13 @@ This command will add search results to the quickfix window from a previous
 search, instead clearing the results.
     >
     :G some_var
-    " Searches for some_var and shows the results
     :GAdd other_var
-    " Adds other_var results to the bottom of the list
 <
+    The first :G command will search for 'some_var'. The second command,
+    :GAdd, will search for 'other_var' and it the results to the list of
+    results of the first command instead of generating a completely new list,
+    and losing the previous results.
+
 Behaves similarly to |:grepadd|.
 
 ------------------------------------------------------------------------------
@@ -126,31 +130,35 @@ Greper will try to find known utilities in the system, and create the
 following commands for each one it recognizes.
 
 ------------------------------------------------------------------------------
-2.2.1 :Ag family                    *:Ag* *:AgAdd* *:LAg* *:LAgAdd* *GreperAg*
+2.2.1 :Ag family                               *:Ag* *:AgAdd* *:LAg* *:LAgAdd*
 
-The :Ag family of commands is created if "ag" is found on the system.
+The `:Ag` family of commands is created if `ag` is found on the system.
 
-For more information on "ag" a.k.a the silver surfer, go to:
+For usage info, refer to |:G|.
+
+For more information on `ag` a.k.a "the silver surfer", go to:
 
     http://geoff.greer.fm/2011/12/27/the-silver-searcher-better-than-ack/
     https://github.com/ggreer/the_silver_searcher
 
 ------------------------------------------------------------------------------
-2.2.2 :Ack family              *:Ack* *:AckAdd* *:LAck* *:LAckAdd* *GreperAck*
+2.2.2 :Ack family                          *:Ack* *:AckAdd* *:LAck* *:LAckAdd*
 
-The :Ack family of commands is created if "ack" is found on the system.
+The `:Ack` family of commands is created if `ack` is found on the system.
 
-For more information on "ack", go to:
+For usage info, refer to |:G|.
+
+For more information on `ack`, go to:
 
     http://betterthangrep.com/
     https://github.com/petdance/ack
 
 ------------------------------------------------------------------------------
-2.2.3 :Grep family        *:Grep* *:GrepAdd* *:LGrep* *:LGrepAdd* *GreperGrep*
+2.2.3 :Grep family                     *:Grep* *:GrepAdd* *:LGrep* *:LGrepAdd*
 
-The :Grep family of commands is created if "grep" if found on the system.
+The `:Grep` family of commands is created if `grep` if found on the system.
 
-If you do not have grep on your system...
+If you do not have `grep` on your system...
 
 ==============================================================================
 3. Mappings                                                   *GreperMappings*
@@ -184,11 +192,12 @@ This plugin provides helpful mappings for common use cases.
 <Plug>Greper!   Searches for the word under the cursor, show the results and
                 stays put.
 
-For example, add this to your $VIMRC:
+For example, add this to your |.vimrc|:
     >
     :nmap <silent> <leader>a <Plug>Greper!
-    " Notice that using noremap will not work with <Plug> mappings.
 <
+    Note: Using |:noremap| will not work with <Plug> mappings.
+
 ==============================================================================
 4. License                                                     *GreperLicense*
 
