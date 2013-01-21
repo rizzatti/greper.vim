@@ -53,15 +53,19 @@ if exists('g:greper_utility')
   call s:CreateCommand('LG', 'lgrep', g:greper_utility)
   call s:CreateCommand('LGAdd', 'lgrepadd', g:greper_utility)
   noremap <script> <unique> <Plug>Greper <SID>Greper
-  noremap <SID>Greper :call <SID>Greper('')<CR>
+  noremap <SID>Greper :call <SID>Greper('', '<cword>')<CR>
   noremap <script> <unique> <Plug>Greper! <SID>Greper!
-  noremap <SID>Greper! :call <SID>Greper('!')<CR>
+  noremap <SID>Greper! :call <SID>Greper('!', '<cword>')<CR>
+  noremap <script> <unique> <Plug>GreperWORD <SID>GreperWORD
+  noremap <SID>GreperWORD :call <SID>Greper('', '<cWORD>')<CR>
+  noremap <script> <unique> <Plug>Greper!WORD <SID>Greper!WORD
+  noremap <SID>Greper!WORD :call <SID>Greper('!', '<cWORD>')<CR>
 else
   echoerr 'greper.vim: could not find any suitable greper utility'
 endif
 
-function! s:Greper(bang)
-  call greper#Run('grep' . a:bang, g:greper_utility, expand('<cword>'))
+function! s:Greper(bang, word)
+  call greper#Run('grep' . a:bang, g:greper_utility, expand(a:word))
 endfunction
 
 let &cpoptions = s:save_cpoptions

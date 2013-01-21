@@ -197,11 +197,17 @@ q               Closes the quickfix (or location list) window.
 
 This plugin provides helpful mappings for common use cases.
 
-<Plug>Greper    Searches for the word under the cursor, show the results and
-                jumps to it.
+<Plug>Greper            Searches for the |word| under the cursor, shows the
+                        results and jumps to the first match.
 
-<Plug>Greper!   Searches for the word under the cursor, show the results and
-                stays put.
+<Plug>Greper!           Searches for the |word| under the cursor and shows the
+                        results.
+
+<Plug>GreperWORD        Searches for the |WORD| under the cursor, shows the
+                        results and jumps to the first match.
+
+<Plug>Greper!WORD       Searches for the |WORD| under the cursor and shows the
+                        results.
 
 For example, add this to your |.vimrc|:
     >
