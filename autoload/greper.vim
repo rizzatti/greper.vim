@@ -1,67 +1,119 @@
-function! s:New(class, ...) abort
+function! s:new(class, ...) abort "{{{
   let instance = copy(a:class)
-  call call(instance.Init, a:000, instance)
+  call call(instance.init, a:000, instance)
   return instance
 endfunction
+"}}}
 
-let s:Greper = {}
-function! s:Greper.Init(ex, utility, args) dict abort
-  let self.ex      = a:ex
-  let self.utility = a:utility
-  let self.args    = self._Parse(a:args)
+let s:greper = {}
+
+function! s:greper.init(command, args) dict abort "{{{
+  let self.command = a:command
+  call self._parse(a:args)
 endfunction
+"}}}
 
-function! s:Greper.Execute() dict abort
-  call self._SaveOptions()
-  silent execute join([self.ex, self.args], ' ')
-  call self._RestoreOptions()
+function! s:greper.run() dict abort "{{{
+  call self._sandbox(self._save, self._restore, self._execute)
 endfunction
+"}}}
 
-function! s:Greper._Escape(pattern) dict abort
-  let matches = matchlist(a:pattern, '^\/\(.*\)\/$')
-  if len(matches) == 0
-    let pattern = escape(a:pattern, self._Get('chars'))
-  else
-    let pattern = matches[1]
-  endif
-  return shellescape(pattern, 1)
+function! s:greper._args() dict abort "{{{
+  return join([self.pattern] + self.files, ' ')
 endfunction
+"}}}
 
-function! s:Greper._Get(variable) dict abort
+function! s:greper._commandLine() dict abort "{{{
+  let executable = self._executable()
+  let options = self._options()
+  return join([executable, options], ' ')
+endfunction
+"}}}
+
+function! s:greper._exCommand() dict abort "{{{
+  return join([self.command, self._args()], ' ')
+endfunction
+"}}}
+
+function! s:greper._executable() dict abort "{{{
+  return self._get('executable')
+endfunction
+"}}}
+
+function! s:greper._execute() dict abort "{{{
+  silent execute self._exCommand()
+endfunction
+"}}}
+
+function! s:greper._get(variable) dict abort "{{{
   return g:greper#{self.utility}#{a:variable}
 endfunction
+"}}}
 
-function! s:Greper._Parse(args) dict abort
-  let size    = len(a:args)
-  let pattern = self._Escape(size == 0 ? expand('<cword>') : a:args[0])
-  let files   = size >= 2 ? a:args[1:] : ['*']
-  return join([pattern] + files, ' ')
+function! s:greper._options() dict abort "{{{
+  return join(self._get('options'), ' ')
 endfunction
+"}}}
 
-function! s:Greper._RestoreOptions() dict abort
-  let &grepprg    = self._save.grepprg
-  let &grepformat = self._save.grepformat
+function! s:greper._parse(args) dict abort "{{{
+  let size = len(a:args)
+  call self._parsePattern(size ? a:args[0] : expand('<cword>'))
+  let self.files = size >= 2 ? a:args[1:] : self._get('files')
 endfunction
+"}}}
 
-function! s:Greper._SaveOptions() dict abort
-  let self._save = {}
-  let self._save.grepprg    = &grepprg
-  let self._save.grepformat = &grepformat
-  let &grepprg              = self._Get('grepprg')
-  let &grepformat           = self._Get('grepformat')
+function! s:greper._parsePattern(pattern) dict abort "{{{
+  let matches = matchlist(a:pattern, '^\/\(.*\)\/$')
+  if len(matches)
+    let self.pattern = shellescape(matches[1])
+    let self.patternType = 'regexp'
+  else
+    let self.pattern = shellescape(a:pattern)
+    let self.patternType = 'literal'
+  endif
 endfunction
+"}}}
 
-let s:Window = {}
-function! s:Window.Init(ex) dict abort
-  let self.prefix = a:ex =~? '^l' ? 'l' : 'c'
+function! s:greper._restore(settings) dict abort "{{{
+  let &l:grepprg    = a:settings.grepprg
+  let &l:grepformat = a:settings.grepformat
 endfunction
+"}}}
 
-function! s:Window.Setup() dict abort
-  call self._Open()
-  call self._AddMappings()
+function! s:greper._sandbox(before, after, worker) dict abort "{{{
+  let sandbox = {}
+  call call(a:before, [sandbox], self)
+  try
+    let result = call(a:worker, [], self)
+  finally
+    call call(a:after, [sandbox], self)
+  endtry
+  return result
 endfunction
+"}}}
 
-function! s:Window._AddMappings() dict abort
+function! s:greper._save(settings) dict abort "{{{
+  let a:settings.grepprg    = &l:grepprg
+  let a:settings.grepformat = &l:grepformat
+  let &l:grepprg            = self._commandLine()
+  let &l:grepformat         = self._get('grepformat')
+endfunction
+"}}}
+
+let s:window = {}
+
+function! s:window.init(command) dict abort "{{{
+  let self.prefix = a:command =~? '^l' ? 'l' : 'c'
+endfunction
+"}}}
+
+function! s:window.setup() dict abort "{{{
+  call self._open()
+  call self._addMappings()
+endfunction
+"}}}
+
+function! s:window._addMappings() dict abort "{{{
   noremap <silent> <buffer> go <CR><C-w>p<C-w>=
   noremap <silent> <buffer> gs <C-w>p<C-w>s<C-w>b<CR><C-w>p<C-w>=
   noremap <silent> <buffer> gt <C-w><CR><C-w>TgT<C-w>p
@@ -72,17 +124,22 @@ function! s:Window._AddMappings() dict abort
   noremap <silent> <buffer> t <C-w><CR><C-w>T
   noremap <silent> <buffer> v <C-w>p<C-w>v<C-w>b<CR><C-w>=
 endfunction
+"}}}
 
-function! s:Window._Open() dict abort
+function! s:window._open() dict abort "{{{
   let command = 'botright ' . self.prefix . 'open'
   silent execute command
 endfunction
+"}}}
 
-function! greper#Run(ex, utility, ...) abort
+let g:greper#class = s:greper
+
+function! greper#run(utility, command, ...) abort "{{{
   redraw
-  let greper = s:New(s:Greper, a:ex, a:utility, a:000)
-  let window = s:New(s:Window, a:ex)
-  call greper.Execute()
-  call window.Setup()
+  let greper = s:new(g:greper#{a:utility}#class, a:command, a:000)
+  let window = s:new(s:window, a:command)
+  call greper.run()
+  call window.setup()
   redraw!
 endfunction
+"}}}
