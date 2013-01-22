@@ -36,7 +36,7 @@ endfunction
 "}}}
 
 function! s:greper._executable() dict abort "{{{
-  return self._get(self.patternType . '_executable')
+  return self._get('executable')
 endfunction
 "}}}
 

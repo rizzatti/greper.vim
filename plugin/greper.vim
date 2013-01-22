@@ -40,7 +40,7 @@ endif
 "}}}
 
 "{{{ ack commands
-if executable('ack')
+if executable('ack') || executable('ack-grep')
   if !exists('s:utility')
     let s:utility = 'ack'
   endif
