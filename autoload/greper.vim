@@ -1,3 +1,7 @@
+" Description: Make grep commands more useful
+" Author: Zeh Rizzatti <zehrizzatti@gmail.com>
+" License: MIT
+
 function! s:new(class, ...) abort "{{{
   let instance = copy(a:class)
   call call(instance.init, a:000, instance)

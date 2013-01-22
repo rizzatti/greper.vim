@@ -1,4 +1,8 @@
-if exists("g:loaded_greper")
+" Description: Make grep commands more useful
+" Author: Zeh Rizzatti <zehrizzatti@gmail.com>
+" License: MIT
+
+if exists('g:loaded_greper') || &compatible || v:version < 700
   finish
 endif
 let g:loaded_greper = 1
@@ -22,7 +26,7 @@ function! s:CreateCommand(command, ex, utility) abort "{{{
 endfunction
 "}}}
 
-function! s:Greper(bang, word) "{{{
+function! s:Greper(bang, word) abort "{{{
   call greper#run(s:utility, 'grep' . a:bang, expand(a:word))
 endfunction
 "}}}

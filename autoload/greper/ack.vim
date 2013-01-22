@@ -1,3 +1,7 @@
+" Description: Make grep commands more useful
+" Author: Zeh Rizzatti <zehrizzatti@gmail.com>
+" License: MIT
+
 let s:executable      = executable('ack-grep') ? 'ack-grep' : 'ack'
 let s:files           = []
 let s:grepformat      = '%f:%l:%c:%m'

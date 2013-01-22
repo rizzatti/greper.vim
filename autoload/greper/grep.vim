@@ -1,3 +1,7 @@
+" Description: Make grep commands more useful
+" Author: Zeh Rizzatti <zehrizzatti@gmail.com>
+" License: MIT
+
 let s:files              = ['*']
 let s:grepformat         = '%f:%l:%m'
 let s:literal_executable = 'fgrep'
