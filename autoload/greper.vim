@@ -7,6 +7,99 @@ endfunction
 
 let s:greper = {}
 
+function! s:greper.init(command, args) dict abort "{{{
+  let self.command = a:command
+  call self._parse(a:args)
+endfunction
+"}}}
+
+function! s:greper.run() dict abort "{{{
+  call self._sandbox(self._save, self._restore, self._execute)
+endfunction
+"}}}
+
+function! s:greper._args() dict abort "{{{
+  return join([self.pattern] + self.files, ' ')
+endfunction
+"}}}
+
+function! s:greper._commandLine() dict abort "{{{
+  let executable = self._executable()
+  let options = self._options()
+  return join([executable, options], ' ')
+endfunction
+"}}}
+
+function! s:greper._exCommand() dict abort "{{{
+  return join([self.command, self._args()], ' ')
+endfunction
+"}}}
+
+function! s:greper._executable() dict abort "{{{
+  return self._get(self.patternType . '_executable')
+endfunction
+"}}}
+
+function! s:greper._execute() dict abort "{{{
+  silent execute self._exCommand()
+endfunction
+"}}}
+
+function! s:greper._get(variable) dict abort "{{{
+  return g:greper#{self.utility}#{a:variable}
+endfunction
+"}}}
+
+function! s:greper._options() dict abort "{{{
+  return join(self._get('options'), ' ')
+endfunction
+"}}}
+
+function! s:greper._parse(args) dict abort "{{{
+  let size = len(a:args)
+  call self._parsePattern(size ? a:args[0] : expand('<cword>'))
+  let self.files = size >= 2 ? a:args[1:] : self._get('files')
+endfunction
+"}}}
+
+function! s:greper._parsePattern(pattern) dict abort "{{{
+  let matches = matchlist(a:pattern, '^\/\(.*\)\/$')
+  if len(matches)
+    let self.pattern = shellescape(matches[1])
+    let self.patternType = 'regexp'
+  else
+    let self.pattern = shellescape(a:pattern)
+    let self.patternType = 'literal'
+  endif
+endfunction
+"}}}
+
+function! s:greper._restore(settings) dict abort "{{{
+  let &l:grepprg    = a:settings.grepprg
+  let &l:grepformat = a:settings.grepformat
+endfunction
+"}}}
+
+function! s:greper._sandbox(before, after, worker) dict abort "{{{
+  let sandbox = {}
+  call call(a:before, [sandbox], self)
+  try
+    let result = call(a:worker, [], self)
+  finally
+    call call(a:after, [sandbox], self)
+  endtry
+  return result
+endfunction
+"}}}
+
+function! s:greper._save(settings) dict abort "{{{
+  let a:settings.grepprg    = &l:grepprg
+  let a:settings.grepformat = &l:grepformat
+  let &l:grepprg            = self._commandLine()
+  let &l:grepformat         = self._get('grepformat')
+endfunction
+"}}}
+
 let s:window = {}
 
 function! s:window.init(command) dict abort "{{{
