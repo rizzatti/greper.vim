@@ -14,11 +14,15 @@ let s:greper = {}
 function! s:greper.init(command, args) dict abort "{{{
   let self.command = a:command
   call self._parse(a:args)
+  let self.quickfix = s:new(s:quickfix, a:command)
 endfunction
 "}}}
 
 function! s:greper.run() dict abort "{{{
+  redraw
   call self._sandbox(self._save, self._restore, self._execute)
+  call self.quickfix.setup()
+  redraw!
 endfunction
 "}}}
 
@@ -104,20 +108,22 @@ function! s:greper._save(settings) dict abort "{{{
 endfunction
 "}}}
 
-let s:window = {}
+let s:quickfix = {}
 
-function! s:window.init(command) dict abort "{{{
-  let self.prefix = a:command =~? '^l' ? 'l' : 'c'
+function! s:quickfix.init(command) dict abort "{{{
+  let self.prefix         = a:command =~? '^l' ? 'l' : 'c'
+  let self.originalWindow = bufwinnr(bufnr('%'))
+  let self.previewWindow  = 0
 endfunction
 "}}}
 
-function! s:window.setup() dict abort "{{{
+function! s:quickfix.setup() dict abort "{{{
   call self._open()
   call self._addMappings()
 endfunction
 "}}}
 
-function! s:window._addMappings() dict abort "{{{
+function! s:quickfix._addMappings() dict abort "{{{
   noremap <silent> <buffer> go <CR><C-w>p<C-w>=
   noremap <silent> <buffer> gs <C-w>p<C-w>s<C-w>b<CR><C-w>p<C-w>=
   noremap <silent> <buffer> gt <C-w><CR><C-w>TgT<C-w>p
@@ -130,7 +136,7 @@ function! s:window._addMappings() dict abort "{{{
 endfunction
 "}}}
 
-function! s:window._open() dict abort "{{{
+function! s:quickfix._open() dict abort "{{{
   let command = 'botright ' . self.prefix . 'open'
   silent execute command
 endfunction
@@ -139,11 +145,7 @@ endfunction
 let g:greper#class = s:greper
 
 function! greper#run(utility, command, ...) abort "{{{
-  redraw
   let greper = s:new(g:greper#{a:utility}#class, a:command, a:000)
-  let window = s:new(s:window, a:command)
   call greper.run()
-  call window.setup()
-  redraw!
 endfunction
 "}}}
