@@ -2,23 +2,11 @@
 " Author: Zeh Rizzatti <zehrizzatti@gmail.com>
 " License: MIT
 
-let s:executable      = executable('ack-grep') ? 'ack-grep' : 'ack'
-let s:files           = []
-let s:grepformat      = '%f:%l:%c:%m'
-let s:options         = ['-H', '--nocolor', '--nogroup', '--column']
-let s:literal_options = ['--literal']
-let s:regexp_options  = []
-
 let s:ack = copy(g:greper#class)
 
 function! s:ack.init(command, args) dict abort "{{{
   let self.utility = 'ack'
   call call(g:greper#class.init, [a:command, a:args], self)
-endfunction
-"}}}
-
-function! s:ack._get(variable) dict abort "{{{
-  return s:{a:variable}
 endfunction
 "}}}
 
@@ -29,4 +17,10 @@ function! s:ack._options() dict abort "{{{
 endfunction
 "}}}
 
-let g:greper#ack#class = s:ack
+let greper#ack#executable      = executable('ack-grep') ? 'ack-grep' : 'ack'
+let greper#ack#files           = []
+let greper#ack#grepformat      = '%f:%l:%c:%m'
+let greper#ack#options         = ['-H', '--nocolor', '--nogroup', '--column']
+let greper#ack#literal_options = ['--literal']
+let greper#ack#regexp_options  = []
+let greper#ack#class           = s:ack

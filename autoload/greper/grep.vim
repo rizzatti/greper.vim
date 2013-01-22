@@ -2,12 +2,6 @@
 " Author: Zeh Rizzatti <zehrizzatti@gmail.com>
 " License: MIT
 
-let s:files              = ['*']
-let s:grepformat         = '%f:%l:%m'
-let s:literal_executable = 'fgrep'
-let s:options            = ['-n', '-H', '-R']
-let s:regexp_executable  = 'egrep'
-
 let s:grep = copy(g:greper#class)
 
 function! s:grep.init(command, args) dict abort "{{{
@@ -21,9 +15,9 @@ function! s:grep._executable() dict abort "{{{
 endfunction
 "}}}
 
-function! s:grep._get(variable) dict abort "{{{
-  return s:{a:variable}
-endfunction
-"}}}
-
-let g:greper#grep#class = s:grep
+let greper#grep#files              = ['*']
+let greper#grep#grepformat         = '%f:%l:%m'
+let greper#grep#literal_executable = 'fgrep'
+let greper#grep#options            = ['-n', '-H', '-R']
+let greper#grep#regexp_executable  = 'egrep'
+let greper#grep#class              = s:grep

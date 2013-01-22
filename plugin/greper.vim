@@ -2,16 +2,16 @@
 " Author: Zeh Rizzatti <zehrizzatti@gmail.com>
 " License: MIT
 
-if exists('g:loaded_greper') || &compatible || v:version < 700
+if exists('loaded_greper') || &compatible || v:version < 700
   finish
 endif
-let g:loaded_greper = 1
+let loaded_greper = 1
 
 let s:save_cpoptions = &cpoptions
 set cpoptions&vim
 
-if exists('g:greper_utility')
-  let s:utility = g:greper_utility
+if exists('greper_utility')
+  let s:utility = greper_utility
 endif
 
 function! s:CreateCommand(command, ex, utility) abort "{{{

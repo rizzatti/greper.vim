@@ -2,23 +2,11 @@
 " Author: Zeh Rizzatti <zehrizzatti@gmail.com>
 " License: MIT
 
-let s:executable      = 'ag'
-let s:files           = []
-let s:grepformat      = '%f:%l:%c:%m'
-let s:options         = ['--nocolor', '--nogroup', '--column']
-let s:literal_options = ['--literal']
-let s:regexp_options  = []
-
 let s:ag = copy(g:greper#class)
 
 function! s:ag.init(command, args) dict abort "{{{
   let self.utility = 'ag'
   call call(g:greper#class.init, [a:command, a:args], self)
-endfunction
-"}}}
-
-function! s:ag._get(variable) dict abort "{{{
-  return s:{a:variable}
 endfunction
 "}}}
 
@@ -29,4 +17,10 @@ function! s:ag._options() dict abort "{{{
 endfunction
 "}}}
 
-let g:greper#ag#class = s:ag
+let greper#ag#executable      = 'ag'
+let greper#ag#files           = []
+let greper#ag#grepformat      = '%f:%l:%c:%m'
+let greper#ag#options         = ['--nocolor', '--nogroup', '--column']
+let greper#ag#literal_options = ['--literal']
+let greper#ag#regexp_options  = []
+let greper#ag#class           = s:ag

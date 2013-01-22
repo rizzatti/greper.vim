@@ -142,7 +142,7 @@ function! s:quickfix._open() dict abort "{{{
 endfunction
 "}}}
 
-let g:greper#class = s:greper
+let greper#class = s:greper
 
 function! greper#run(utility, command, ...) abort "{{{
   let greper = s:new(g:greper#{a:utility}#class, a:command, a:000)
