@@ -2,23 +2,18 @@
 " Author: Zeh Rizzatti <zehrizzatti@gmail.com>
 " License: MIT
 
-function! s:new(class, ...) abort "{{{
-  let instance = copy(a:class)
-  call call(instance.init, a:000, instance)
-  return instance
-endfunction
-"}}}
+let s:class = funcoo#object#class.extend()
 
-let s:greper = {}
+let s:proto = {}
 
-function! s:greper.init(command, args) dict abort "{{{
+function! s:proto.constructor(command, args) dict abort "{{{
   let self.command = a:command
   call self._parse(a:args)
-  let self.quickfix = s:new(s:quickfix, a:command)
+  let self.quickfix = g:greper#quickfix#class.new(a:command)
 endfunction
 "}}}
 
-function! s:greper.run() dict abort "{{{
+function! s:proto.run() dict abort "{{{
   redraw
   call self._sandbox(self._save, self._restore, self._execute)
   call self.quickfix.setup()
@@ -26,51 +21,51 @@ function! s:greper.run() dict abort "{{{
 endfunction
 "}}}
 
-function! s:greper._args() dict abort "{{{
+function! s:proto._args() dict abort "{{{
   return join([self.pattern] + self.files, ' ')
 endfunction
 "}}}
 
-function! s:greper._commandLine() dict abort "{{{
+function! s:proto._commandLine() dict abort "{{{
   let executable = self._executable()
   let options = self._options()
   return join([executable, options], ' ')
 endfunction
 "}}}
 
-function! s:greper._exCommand() dict abort "{{{
+function! s:proto._exCommand() dict abort "{{{
   return join([self.command, self._args()], ' ')
 endfunction
 "}}}
 
-function! s:greper._executable() dict abort "{{{
+function! s:proto._executable() dict abort "{{{
   return self._get('executable')
 endfunction
 "}}}
 
-function! s:greper._execute() dict abort "{{{
+function! s:proto._execute() dict abort "{{{
   silent execute self._exCommand()
 endfunction
 "}}}
 
-function! s:greper._get(variable) dict abort "{{{
+function! s:proto._get(variable) dict abort "{{{
   return g:greper#{self.utility}#{a:variable}
 endfunction
 "}}}
 
-function! s:greper._options() dict abort "{{{
+function! s:proto._options() dict abort "{{{
   return join(self._get('options'), ' ')
 endfunction
 "}}}
 
-function! s:greper._parse(args) dict abort "{{{
+function! s:proto._parse(args) dict abort "{{{
   let size = len(a:args)
   call self._parsePattern(size ? a:args[0] : expand('<cword>'))
   let self.files = size >= 2 ? a:args[1:] : self._get('files')
 endfunction
 "}}}
 
-function! s:greper._parsePattern(pattern) dict abort "{{{
+function! s:proto._parsePattern(pattern) dict abort "{{{
   let matches = matchlist(a:pattern, '^\/\(.*\)\/$')
   if len(matches)
     let self.pattern = shellescape(matches[1])
@@ -82,13 +77,13 @@ function! s:greper._parsePattern(pattern) dict abort "{{{
 endfunction
 "}}}
 
-function! s:greper._restore(settings) dict abort "{{{
+function! s:proto._restore(settings) dict abort "{{{
   let &l:grepprg    = a:settings.grepprg
   let &l:grepformat = a:settings.grepformat
 endfunction
 "}}}
 
-function! s:greper._sandbox(before, after, worker) dict abort "{{{
+function! s:proto._sandbox(before, after, worker) dict abort "{{{
   let sandbox = {}
   call call(a:before, [sandbox], self)
   try
@@ -100,7 +95,7 @@ function! s:greper._sandbox(before, after, worker) dict abort "{{{
 endfunction
 "}}}
 
-function! s:greper._save(settings) dict abort "{{{
+function! s:proto._save(settings) dict abort "{{{
   let a:settings.grepprg    = &l:grepprg
   let a:settings.grepformat = &l:grepformat
   let &l:grepprg            = self._commandLine()
@@ -108,44 +103,12 @@ function! s:greper._save(settings) dict abort "{{{
 endfunction
 "}}}
 
-let s:quickfix = {}
+call s:class.include(s:proto)
 
-function! s:quickfix.init(command) dict abort "{{{
-  let self.prefix         = a:command =~? '^l' ? 'l' : 'c'
-  let self.originalWindow = bufwinnr(bufnr('%'))
-  let self.previewWindow  = 0
-endfunction
-"}}}
-
-function! s:quickfix.setup() dict abort "{{{
-  call self._open()
-  call self._addMappings()
-endfunction
-"}}}
-
-function! s:quickfix._addMappings() dict abort "{{{
-  noremap <silent> <buffer> go <CR><C-w>p<C-w>=
-  noremap <silent> <buffer> gs <C-w>p<C-w>s<C-w>b<CR><C-w>p<C-w>=
-  noremap <silent> <buffer> gt <C-w><CR><C-w>TgT<C-w>p
-  noremap <silent> <buffer> gv <C-w>p<C-w>v<C-w>b<CR><C-w>p<C-w>=
-  noremap <silent> <buffer> o <CR>
-  execute 'noremap <silent> <buffer> q :' . self.prefix . 'close<CR>'
-  noremap <silent> <buffer> s <C-w>p<C-w>s<C-w>b<CR><C-w>=
-  noremap <silent> <buffer> t <C-w><CR><C-w>T
-  noremap <silent> <buffer> v <C-w>p<C-w>v<C-w>b<CR><C-w>=
-endfunction
-"}}}
-
-function! s:quickfix._open() dict abort "{{{
-  let command = 'botright ' . self.prefix . 'open'
-  silent execute command
-endfunction
-"}}}
-
-let greper#class = s:greper
+let greper#class = s:class
 
 function! greper#run(utility, command, ...) abort "{{{
-  let greper = s:new(g:greper#{a:utility}#class, a:command, a:000)
+  let greper = g:greper#{a:utility}#class.new(a:command, a:000)
   call greper.run()
 endfunction
 "}}}
