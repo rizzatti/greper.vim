@@ -7,7 +7,7 @@ let s:proto = {}
 
 function! s:proto.constructor(command, args) dict abort "{{{
   let self.utility = 'grep'
-  call call(self.__super__.constructor, [a:command, a:args], self)
+  call self.__super('constructor', a:command, a:args)
 endfunction
 "}}}
 
