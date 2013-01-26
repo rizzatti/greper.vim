@@ -3,7 +3,6 @@
 " License: MIT
 
 let s:class = funcoo#object#class.extend()
-
 let s:proto = {}
 
 function! s:proto.constructor(command, args) dict abort "{{{
@@ -14,54 +13,41 @@ endfunction
 "}}}
 
 function! s:proto.run() dict abort "{{{
-  redraw
   call self._sandbox(self._save, self._restore, self._execute)
   call self.quickfix.setup()
   redraw!
 endfunction
 "}}}
 
-function! s:proto._args() dict abort "{{{
-  return join([self.pattern] + self.files, ' ')
+function! s:proto._executableName() dict abort "{{{
+  return self._options('executable')
 endfunction
 "}}}
 
-function! s:proto._commandLine() dict abort "{{{
-  let executable = self._executable()
-  let options = self._options()
-  return join([executable, options], ' ')
-endfunction
-"}}}
-
-function! s:proto._exCommand() dict abort "{{{
-  return join([self.command, self._args()], ' ')
-endfunction
-"}}}
-
-function! s:proto._executable() dict abort "{{{
-  return self._get('executable')
+function! s:proto._executableOptions() dict abort "{{{
+  return join(self._options('options'))
 endfunction
 "}}}
 
 function! s:proto._execute() dict abort "{{{
-  silent execute self._exCommand()
+  silent execute self.command self.pattern join(self.files)
 endfunction
 "}}}
 
-function! s:proto._get(variable) dict abort "{{{
-  return g:greper#{self.utility}#{a:variable}
+function! s:proto._grepprg() dict abort "{{{
+  return join([self._executableName(), self._executableOptions()])
 endfunction
 "}}}
 
-function! s:proto._options() dict abort "{{{
-  return join(self._get('options'), ' ')
+function! s:proto._options(variable, ...) dict abort "{{{
+  return get(self.__class__.options, a:variable, a:0 ? a:1 : 0)
 endfunction
 "}}}
 
 function! s:proto._parse(args) dict abort "{{{
   let size = len(a:args)
   call self._parsePattern(size ? a:args[0] : expand('<cword>'))
-  let self.files = size >= 2 ? a:args[1:] : self._get('files')
+  let self.files = size > 1 ? a:args[1:] : self._options('files', [])
 endfunction
 "}}}
 
@@ -77,9 +63,9 @@ function! s:proto._parsePattern(pattern) dict abort "{{{
 endfunction
 "}}}
 
-function! s:proto._restore(settings) dict abort "{{{
-  let &l:grepprg    = a:settings.grepprg
-  let &l:grepformat = a:settings.grepformat
+function! s:proto._restore(sandbox) dict abort "{{{
+  let &l:grepprg    = a:sandbox.grepprg
+  let &l:grepformat = a:sandbox.grepformat
 endfunction
 "}}}
 
@@ -95,11 +81,11 @@ function! s:proto._sandbox(before, after, worker) dict abort "{{{
 endfunction
 "}}}
 
-function! s:proto._save(settings) dict abort "{{{
-  let a:settings.grepprg    = &l:grepprg
-  let a:settings.grepformat = &l:grepformat
-  let &l:grepprg            = self._commandLine()
-  let &l:grepformat         = self._get('grepformat')
+function! s:proto._save(sandbox) dict abort "{{{
+  let a:sandbox.grepprg    = &l:grepprg
+  let a:sandbox.grepformat = &l:grepformat
+  let &l:grepprg           = self._grepprg()
+  let &l:grepformat        = self._options('grepformat')
 endfunction
 "}}}
 
@@ -112,3 +98,7 @@ function! greper#run(utility, command, ...) abort "{{{
   call greper.run()
 endfunction
 "}}}
+
+if !exists('greper_debug') || !greper_debug
+  lockvar! s:class
+endif

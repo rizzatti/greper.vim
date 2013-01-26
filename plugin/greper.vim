@@ -10,24 +10,22 @@ let loaded_greper = 1
 let s:save_cpoptions = &cpoptions
 set cpoptions&vim
 
-if exists('greper_utility')
-  let s:utility = greper_utility
+if exists('greper["utility"]')
+  let s:utility = greper.utility
 endif
 
 function! s:CreateCommand(command, ex, utility) abort "{{{
-  if exists(':' . a:command) == 2
-    echoerr 'greper.vim: could not create :' . a:command
+  let command = ':'.a:command
+  if exists(command) == 2
+    echohl WarningMsg
+    echomsg 'greper.vim:' 'could not create command' command
+    echohl None
     return
   endif
-  let definition = 'command -bang -nargs=* -complete=file ' . a:command
-  let parens = '("' . a:utility . '", "' . a:ex . '<bang>", <f-args>)'
-  let callee = ' call greper#run' . parens
-  execute definition . callee
-endfunction
-"}}}
-
-function! s:Greper(bang, word) abort "{{{
-  call greper#run(s:utility, 'grep' . a:bang, expand(a:word))
+  let definition = 'command -bang -nargs=* -complete=file'
+  let parens = '("'.a:utility.'", "'.a:ex.'<bang>", <f-args>)'
+  let callee = 'call greper#run'.parens
+  execute definition a:command callee
 endfunction
 "}}}
 
@@ -75,18 +73,26 @@ if exists('s:utility')
   call s:CreateCommand('LGAdd', 'lgrepadd', s:utility)
   "{{{ <Plug> mappings
   noremap <script> <unique> <Plug>GreperWord <SID>GreperWord
-  noremap <SID>GreperWord :call <SID>Greper('', '<cword>')<CR>
+  noremap <SID>GreperWord
+        \ :call greper#run(s:utility, 'grep', expand('<cword>'))<CR>
   noremap <script> <unique> <Plug>Greper!Word <SID>Greper!Word
-  noremap <SID>Greper!Word :call <SID>Greper('!', '<cword>')<CR>
+  noremap <SID>GreperWord
+        \ :call greper#run(s:utility, 'grep!', expand('<cword>'))<CR>
   noremap <script> <unique> <Plug>GreperWORD <SID>GreperWORD
-  noremap <SID>GreperWORD :call <SID>Greper('', '<cWORD>')<CR>
+  noremap <SID>GreperWord
+        \ :call greper#run(s:utility, 'grep', expand('<cWORD>'))<CR>
   noremap <script> <unique> <Plug>Greper!WORD <SID>Greper!WORD
-  noremap <SID>Greper!WORD :call <SID>Greper('!', '<cWORD>')<CR>
+  noremap <SID>GreperWord
+        \ :call greper#run(s:utility, 'grep!', expand('<cWORD>'))<CR>
   "}}}
 else
-  echoerr 'greper.vim: could not find any suitable greper utility'
+  echohl WarningMsg
+  echomsg 'greper.vim:' 'could not find any suitable utility'
+  echohl None
 endif
 "}}}
+
+delfunction s:CreateCommand
 
 let &cpoptions = s:save_cpoptions
 unlet s:save_cpoptions

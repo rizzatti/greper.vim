@@ -3,6 +3,21 @@
 " License: MIT
 
 let s:class = greper#class.extend()
+
+let s:options                 = {}
+let s:options.executable      = executable('ack-grep') ? 'ack-grep' : 'ack'
+let s:options.grepformat      = '%f:%l:%c:%m'
+let s:options.options         = ['-H', '--nocolor', '--nogroup', '--column']
+let s:options.literal_options = ['--literal']
+
+if exists('greper["ack"]')
+  let s:dict = funcoo#dict#module
+  let s:userOptions = s:dict.get(greper, 'ack', {})
+  call s:dict.extend(s:class.options, s:userOptions)
+endif
+
+let s:class.options = s:options
+
 let s:proto = {}
 
 function! s:proto.constructor(command, args) dict abort "{{{
@@ -11,19 +26,17 @@ function! s:proto.constructor(command, args) dict abort "{{{
 endfunction
 "}}}
 
-function! s:proto._options() dict abort "{{{
-  let options = self._get('options')
-  let modeOptions = self._get(self.patternType . '_options')
-  return join(options + modeOptions, ' ')
+function! s:proto._executableOptions() dict abort "{{{
+  let options     = self._options('options', [])
+  let modeOptions = self._options(self.patternType.'_options', [])
+  return join(options + modeOptions)
 endfunction
 "}}}
 
 call s:class.include(s:proto)
 
-let greper#ack#executable      = executable('ack-grep') ? 'ack-grep' : 'ack'
-let greper#ack#files           = []
-let greper#ack#grepformat      = '%f:%l:%c:%m'
-let greper#ack#options         = ['-H', '--nocolor', '--nogroup', '--column']
-let greper#ack#literal_options = ['--literal']
-let greper#ack#regexp_options  = []
-let greper#ack#class           = s:class
+let greper#ack#class = s:class
+
+if !exists('greper_debug') || !greper_debug
+  lockvar! s:class
+endif
