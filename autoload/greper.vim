@@ -89,5 +89,5 @@ endfunction
 "}}}
 
 if !exists('greper_debug') || !greper_debug
-  lockvar! s:class
+  lockvar! greper#class
 endif

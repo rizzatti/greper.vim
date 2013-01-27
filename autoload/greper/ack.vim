@@ -38,5 +38,5 @@ call s:class.include(s:proto)
 let greper#ack#class = s:class
 
 if !exists('greper_debug') || !greper_debug
-  lockvar! s:class
+  lockvar! greper#ack#class
 endif
