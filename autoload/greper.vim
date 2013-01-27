@@ -13,7 +13,8 @@ endfunction
 "}}}
 
 function! s:proto.run() dict abort "{{{
-  call self._sandbox(self._save, self._restore, self._execute)
+  let util = g:funcoo#util#module
+  call util.sandbox(self._execute, [], self, self._save, self._restore)
   call self.quickfix.setup()
   redraw!
 endfunction
@@ -63,27 +64,15 @@ function! s:proto._parsePattern(pattern) dict abort "{{{
 endfunction
 "}}}
 
-function! s:proto._restore(sandbox) dict abort "{{{
-  let &l:grepprg    = a:sandbox.grepprg
-  let &l:grepformat = a:sandbox.grepformat
+function! s:proto._restore(settings) dict abort "{{{
+  let &l:grepprg    = a:settings.grepprg
+  let &l:grepformat = a:settings.grepformat
 endfunction
 "}}}
 
-function! s:proto._sandbox(before, after, worker) dict abort "{{{
-  let sandbox = {}
-  call call(a:before, [sandbox], self)
-  try
-    let result = call(a:worker, [], self)
-  finally
-    call call(a:after, [sandbox], self)
-  endtry
-  return result
-endfunction
-"}}}
-
-function! s:proto._save(sandbox) dict abort "{{{
-  let a:sandbox.grepprg    = &l:grepprg
-  let a:sandbox.grepformat = &l:grepformat
+function! s:proto._save(settings) dict abort "{{{
+  let a:settings.grepprg    = &l:grepprg
+  let a:settings.grepformat = &l:grepformat
   let &l:grepprg           = self._grepprg()
   let &l:grepformat        = self._options('grepformat')
 endfunction
