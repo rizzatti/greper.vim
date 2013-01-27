@@ -8,15 +8,17 @@ let s:proto = {}
 function! s:proto.constructor(command, args) dict abort "{{{
   let self.command = a:command
   call self._parse(a:args)
-  let self.quickfix = g:greper#quickfix#class.new(a:command)
+  let self.quickfix = greper#quickfix#for(a:command)
 endfunction
 "}}}
 
 function! s:proto.run() dict abort "{{{
   let util = g:funcoo#util#module
   call util.sandbox(self._execute, [], self, self._save, self._restore)
-  call self.quickfix.setup()
-  redraw!
+  call self.quickfix.open()
+  if !self.quickfix.number()
+    call util.echo('[WarningMsg]', 'No results were found.')
+  endif
 endfunction
 "}}}
 
