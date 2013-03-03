@@ -18,6 +18,7 @@ installing [pathogen.vim][pathogen], and then simply copy and paste:
 
 ```bash
 cd ~/.vim/bundle
+git clone https://github.com/zehrizzatti/funcoo.vim.git
 git clone https://github.com/zehrizzatti/greper.vim.git
 ```
 
