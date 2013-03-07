@@ -11,7 +11,7 @@ let s:options.options         = ['--nocolor', '--nogroup', '--column']
 let s:options.literal_options = ['--literal']
 
 if exists('greper["ag"]')
-  let s:dict = funcoo#dict#module
+  let s:dict = g:funcoo#dict#module
   let s:userOptions = s:dict.get(greper, 'ag', {})
   call s:dict.extend(s:class.options, s:userOptions)
 endif

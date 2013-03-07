@@ -12,7 +12,7 @@ let s:options.options            = ['-n', '-H', '-R']
 let s:options.regexp_executable  = 'egrep'
 
 if exists('greper["grep"]')
-  let s:dict = funcoo#dict#module
+  let s:dict = g:funcoo#dict#module
   let s:userOptions = s:dict.get(greper, 'grep', {})
   call s:dict.extend(s:class.options, s:userOptions)
 endif

@@ -11,7 +11,7 @@ let s:options.options         = ['-H', '--nocolor', '--nogroup', '--column']
 let s:options.literal_options = ['--literal']
 
 if exists('greper["ack"]')
-  let s:dict = funcoo#dict#module
+  let s:dict = g:funcoo#dict#module
   let s:userOptions = s:dict.get(greper, 'ack', {})
   call s:dict.extend(s:class.options, s:userOptions)
 endif
