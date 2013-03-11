@@ -67,23 +67,24 @@ endif
 
 "{{{ greper commands
 if exists('s:utility')
-  call s:CreateCommand('G', 'grep', s:utility)
-  call s:CreateCommand('GAdd', 'grepadd', s:utility)
-  call s:CreateCommand('LG', 'lgrep', s:utility)
-  call s:CreateCommand('LGAdd', 'lgrepadd', s:utility)
+  let utility = s:utility
+  call s:CreateCommand('G', 'grep', utility)
+  call s:CreateCommand('GAdd', 'grepadd', utility)
+  call s:CreateCommand('LG', 'lgrep', utility)
+  call s:CreateCommand('LGAdd', 'lgrepadd', utility)
   "{{{ <Plug> mappings
   noremap <script> <unique> <Plug>GreperWord <SID>GreperWord
   noremap <SID>GreperWord
-        \ :call greper#run(s:utility, 'grep', expand('<cword>'))<CR>
-  noremap <script> <unique> <Plug>Greper!Word <SID>Greper!Word
+        \ :call greper#run(utility, 'grep', expand('<cword>'))<CR>
+  noremap <script> <unique> <Plug>GreperWord! <SID>GreperWord!
   noremap <SID>GreperWord
-        \ :call greper#run(s:utility, 'grep!', expand('<cword>'))<CR>
+        \ :call greper#run(utility, 'grep!', expand('<cword>'))<CR>
   noremap <script> <unique> <Plug>GreperWORD <SID>GreperWORD
   noremap <SID>GreperWord
-        \ :call greper#run(s:utility, 'grep', expand('<cWORD>'))<CR>
-  noremap <script> <unique> <Plug>Greper!WORD <SID>Greper!WORD
+        \ :call greper#run(utility, 'grep', expand('<cWORD>'))<CR>
+  noremap <script> <unique> <Plug>GreperWORD! <SID>GreperWORD!
   noremap <SID>GreperWord
-        \ :call greper#run(s:utility, 'grep!', expand('<cWORD>'))<CR>
+        \ :call greper#run(utility, 'grep!', expand('<cWORD>'))<CR>
   "}}}
 else
   echohl WarningMsg

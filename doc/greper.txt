@@ -197,18 +197,18 @@ This plugin provides helpful mappings for common use cases.
 <Plug>GreperWord        Searches for the |word| under the cursor, shows the
                         results and jumps to the first match.
 
-<Plug>Greper!Word       Searches for the |word| under the cursor and shows the
+<Plug>GreperWord!       Searches for the |word| under the cursor and shows the
                         results.
 
 <Plug>GreperWORD        Searches for the |WORD| under the cursor, shows the
                         results and jumps to the first match.
 
-<Plug>Greper!WORD       Searches for the |WORD| under the cursor and shows the
+<Plug>GreperWORD!       Searches for the |WORD| under the cursor and shows the
                         results.
 
 For example, add this to your |.vimrc|:
     >
-    :nmap <silent> <leader>a <Plug>Greper!Word
+    :nmap <silent> <leader>a <Plug>GreperWord!
 <
     Note: Using |:noremap| will not work with <Plug> mappings.
 
