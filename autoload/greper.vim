@@ -1,5 +1,5 @@
 " Description: Make grep commands more useful
-" Author: Zeh Rizzatti <zehrizzatti@gmail.com>
+" Author: José Otávio Rizzatti <zehrizzatti@gmail.com>
 " License: MIT
 
 let s:class = funcoo#object#class.extend()

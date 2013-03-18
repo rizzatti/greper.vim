@@ -18,8 +18,8 @@ installing [pathogen.vim][pathogen], and then simply copy and paste:
 
 ```bash
 cd ~/.vim/bundle
-git clone https://github.com/zehrizzatti/funcoo.vim.git
-git clone https://github.com/zehrizzatti/greper.vim.git
+git clone https://github.com/rizzatti/funcoo.vim.git
+git clone https://github.com/rizzatti/greper.vim.git
 ```
 
 ## License
@@ -30,4 +30,4 @@ MIT
 [ag]: https://github.com/ggreer/the_silver_searcher
 [grep]: http://www.gnu.org/software/grep/
 [pathogen]: https://github.com/tpope/vim-pathogen
-[vim-doc]: http://vim-doc.heroku.com/view?https://raw.github.com/zehrizzatti/greper.vim/master/doc/greper.txt
+[vim-doc]: http://vim-doc.heroku.com/view?https://raw.github.com/rizzatti/greper.vim/master/doc/greper.txt
