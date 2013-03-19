@@ -9,12 +9,26 @@ It allows using any of these tools: [ag][ag], [ack][ack] and
 It provides a new set of commands, easy navigation of the search results
 window and (recommended) mappings.
 
+## Commands, Mappings and Configuration
+
 Read the [help][vim-doc] to know more.
 
 ## Installation
 
-If you don't have a preferred installation method, I recommend
-installing [pathogen.vim][pathogen], and then simply copy and paste:
+### Using [Vundle][vundle]:
+
+Just add this 2 lines to your `~/.vimrc`:
+
+```vim
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/greper.vim'
+```
+
+And run `:BundleInstall` inside Vim.
+
+### Using [pathogen.vim][pathogen]:
+
+Copy and paste in your shell:
 
 ```bash
 cd ~/.vim/bundle
@@ -31,3 +45,4 @@ MIT
 [grep]: http://www.gnu.org/software/grep/
 [pathogen]: https://github.com/tpope/vim-pathogen
 [vim-doc]: http://vim-doc.heroku.com/view?https://raw.github.com/rizzatti/greper.vim/master/doc/greper.txt
+[vundle]: https://github.com/gmarik/vundle
