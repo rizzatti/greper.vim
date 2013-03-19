@@ -10,6 +10,18 @@ let loaded_greper = 1
 let s:save_cpoptions = &cpoptions
 set cpoptions&vim
 
+"{{{ Load funcoo.vim
+if !exists('g:loaded_funcoo')
+  let funcoo = findfile('plugin/funcoo.vim', &runtimepath)
+  if empty(funcoo)
+    echohl WarningMsg
+    echomsg 'greper.vim: dependencies are not met. please install funcoo.vim'
+    echohl None
+    finish
+  endif
+endif
+"}}}
+
 if exists('greper["utility"]')
   let s:utility = greper.utility
 endif
