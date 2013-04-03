@@ -88,14 +88,14 @@ if exists('s:utility')
   noremap <script> <unique> <Plug>GreperWord <SID>GreperWord
   noremap <SID>GreperWord
         \ :call greper#run(utility, 'grep', expand('<cword>'))<CR>
-  noremap <script> <unique> <Plug>GreperWord! <SID>GreperWord!
-  noremap <SID>GreperWord
+  noremap <script> <unique> <Plug>GreperBangWord <SID>GreperBangWord
+  noremap <SID>GreperBangWord
         \ :call greper#run(utility, 'grep!', expand('<cword>'))<CR>
   noremap <script> <unique> <Plug>GreperWORD <SID>GreperWORD
-  noremap <SID>GreperWord
+  noremap <SID>GreperWORD
         \ :call greper#run(utility, 'grep', expand('<cWORD>'))<CR>
-  noremap <script> <unique> <Plug>GreperWORD! <SID>GreperWORD!
-  noremap <SID>GreperWord
+  noremap <script> <unique> <Plug>GreperBangWORD <SID>GreperBangWORD
+  noremap <SID>GreperBangWORD
         \ :call greper#run(utility, 'grep!', expand('<cWORD>'))<CR>
   "}}}
 else
