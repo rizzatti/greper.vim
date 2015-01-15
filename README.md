@@ -44,5 +44,5 @@ MIT
 [ag]: https://github.com/ggreer/the_silver_searcher
 [grep]: https://www.gnu.org/software/grep/
 [pathogen]: https://github.com/tpope/vim-pathogen
-[vim-doc]: https://vim-doc.herokuapp.com/view?https://raw.github.com/rizzatti/greper.vim/master/doc/greper.txt
+[vim-doc]: https://vim-doc.herokuapp.com/view?https://raw.githubusercontent.com/rizzatti/greper.vim/master/doc/greper.txt
 [vundle]: https://github.com/gmarik/vundle
